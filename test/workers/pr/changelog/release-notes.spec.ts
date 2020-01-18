@@ -22,6 +22,11 @@ const jsYamlChangelogMd = fs.readFileSync(
   'utf8'
 );
 
+const standardVersionChangelogMd = fs.readFileSync(
+  'test/workers/pr/_fixtures/standard-version.md',
+  'utf8'
+);
+
 const contentsResponse = [
   { name: 'lib' },
   { name: 'CHANGELOG.md' },
@@ -178,6 +183,61 @@ describe('workers/pr/release-notes', () => {
         'https://api.github.com/'
       );
       expect(res).not.toBeNull();
+      expect(res).toMatchSnapshot();
+    });
+    it.each`
+      version
+      ${'7.0.1'}
+      ${'7.0.0'}
+    `('parses standard-version version $version', async ({ version }) => {
+      ghGot
+        .mockResolvedValueOnce({ body: contentsResponse })
+        .mockResolvedValueOnce({
+          body: {
+            content: Buffer.from(standardVersionChangelogMd).toString('base64'),
+          },
+        });
+      const res = await getReleaseNotesMd(
+        'conventional-changelog/standard-version',
+        version,
+        'https://github.com/',
+        'https://api.github.com/'
+      );
+      expect(res).not.toBeNull();
+      expect(res).toMatchSnapshot();
+    });
+    it('does not contain version 7.0.1 when parsing standard-version 7.0.0', async () => {
+      ghGot
+        .mockResolvedValueOnce({ body: contentsResponse })
+        .mockResolvedValueOnce({
+          body: {
+            content: Buffer.from(standardVersionChangelogMd).toString('base64'),
+          },
+        });
+      const res = await getReleaseNotesMd(
+        'conventional-changelog/standard-version',
+        '7.0.0',
+        'https://github.com/',
+        'https://api.github.com/'
+      );
+      expect(res.body).toEqual(expect.not.stringContaining('7.0.1'));
+      expect(res).toMatchSnapshot();
+    });
+    it('contains bug fix header when parsing standard-version 7.0.1', async () => {
+      ghGot
+        .mockResolvedValueOnce({ body: contentsResponse })
+        .mockResolvedValueOnce({
+          body: {
+            content: Buffer.from(standardVersionChangelogMd).toString('base64'),
+          },
+        });
+      const res = await getReleaseNotesMd(
+        'conventional-changelog/standard-version',
+        '7.0.1',
+        'https://github.com/',
+        'https://api.github.com/'
+      );
+      expect(res.body).toEqual(expect.stringMatching(/bug fixes/i));
       expect(res).toMatchSnapshot();
     });
   });
