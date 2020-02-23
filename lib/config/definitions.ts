@@ -815,6 +815,26 @@ const options: RenovateOptions[] = [
     env: false,
   },
   {
+    name: 'replacementName',
+    description: '',
+    type: 'string',
+    stage: 'package',
+    parent: 'packageRules',
+    mergeable: true,
+    cli: false,
+    env: false,
+  },
+  {
+    name: 'replacementVersion',
+    description: '',
+    type: 'string',
+    stage: 'package',
+    parent: 'packageRules',
+    mergeable: true,
+    cli: false,
+    env: false,
+  },
+  {
     name: 'updateTypes',
     description:
       'Update types to match against (major, minor, pin, etc). Valid only within `packageRules` object.',
@@ -1217,7 +1237,7 @@ const options: RenovateOptions[] = [
     name: 'commitMessageAction',
     description: 'Action verb to use in commit messages and PR titles',
     type: 'string',
-    default: 'Update',
+    default: '{{# if isReplacement}}Replace{{else}}Update{{/if}}',
     cli: false,
   },
   {
@@ -1233,7 +1253,7 @@ const options: RenovateOptions[] = [
       'Extra description used after the commit message topic - typically the version',
     type: 'string',
     default:
-      'to {{#if isMajor}}v{{{newMajor}}}{{else}}{{#if isSingleVersion}}v{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}{{/if}}',
+      '{{#if isReplacement}} with {{newName}}{{else}}to {{#if isMajor}}v{{{newMajor}}}{{else}}{{#if isSingleVersion}}v{{{toVersion}}}{{else}}{{{newValue}}}{{/if}}{{/if}}{{/if}}',
     cli: false,
   },
   {
@@ -1587,7 +1607,8 @@ const options: RenovateOptions[] = [
       Update: '{{{updateType}}}',
       'Current value': '{{{currentValue}}}',
       'New value': '{{{newValue}}}',
-      Change: '`{{{displayFrom}}}` -> `{{{displayTo}}}`',
+      Change:
+        '{{#if isReplacement}}{{newName}}{{else}}`{{{displayFrom}}}` -> `{{{displayTo}}}`{{/if}}',
       References: '{{{references}}}',
       'Package file': '{{{packageFile}}}',
     },

@@ -160,25 +160,27 @@ export type UpdateType =
   | 'lockFileMaintenance'
   | 'lockfileUpdate'
   | 'rollback'
-  | 'bump';
+  | 'bump'
+  | 'replacement';
 
 // TODO: Proper typings
 export interface PackageRule
   extends RenovateSharedConfig,
     UpdateConfig,
     Record<string, any> {
-  paths?: string[];
-  languages?: string[];
   baseBranchList?: string[];
   datasources?: string[];
   depTypeList?: string[];
-  packageNames?: string[];
-  packagePatterns?: string[];
   excludePackageNames?: string[];
   excludePackagePatterns?: string[];
+  languages?: string[];
   matchCurrentVersion?: string | Range;
+  packageNames?: string[];
+  packagePatterns?: string[];
+  paths?: string[];
+  replacementName?: string;
+  replacementVersion?: string;
   sourceUrlPrefixes?: string[];
-
   updateTypes?: UpdateType[];
 }
 

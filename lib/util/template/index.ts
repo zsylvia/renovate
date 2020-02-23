@@ -50,6 +50,7 @@ export const allowedFields = {
   isMajor: 'true if the upgrade is major',
   isPatch: 'true if the upgrade is a patch upgrade',
   isRange: 'true if the new value is a range',
+  isReplacement: 'true if the upgrade is a replacement',
   isSingleVersion:
     'true if the upgrade is to a single version rather than a range',
   lookupName: 'The full name that was used to look up the dependency.',
@@ -60,6 +61,7 @@ export const allowedFields = {
     'The major version of the new version. e.g. "3" if the new version if "3.1.0"',
   newMinor:
     'The minor version of the new version. e.g. "1" if the new version if "3.1.0"',
+  newName: 'The name of the replacement package',
   newValue:
     'The new value in the upgrade. Can be a range or version e.g. "^3.0.0" or "3.1.0"',
   newVersion: 'The new version in the upgrade.',

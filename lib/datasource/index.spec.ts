@@ -3,15 +3,20 @@ import * as datasource from '.';
 import * as datasourceDocker from './docker';
 import * as datasourceGithubTags from './github-tags';
 import * as datasourceNpm from './npm';
-import { mocked } from '../../test/util';
 import { loadModules } from '../util/modules';
+import { mocked, getName } from '../../test/util';
 
 jest.mock('./docker');
 jest.mock('./npm');
 
 const npmDatasource = mocked(datasourceNpm);
 
-describe('datasource/index', () => {
+describe(getName(__filename), () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+    global.repoCache = {};
+  });
+
   it('returns datasources', () => {
     expect(datasource.getDatasources()).toBeDefined();
     expect(datasource.getDatasourceList()).toBeDefined();
@@ -116,5 +121,18 @@ describe('datasource/index', () => {
       depName: 'cas',
     });
     expect(res.sourceUrl).toEqual('https://github.com/Jasig/cas');
+  });
+  it('applies replacements', async () => {
+    npmDatasource.getReleases.mockResolvedValue({
+      releases: [{ version: '1.0.0' }],
+    });
+    const res = await datasource.getPkgReleases({
+      datasource: datasourceNpm.id,
+      depName: 'abc',
+      replacementName: 'def',
+      replacementVersion: '2.0.0',
+    });
+    expect(res.replacementName).toEqual('def');
+    expect(res.replacementVersion).toEqual('2.0.0');
   });
 });

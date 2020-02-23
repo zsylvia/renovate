@@ -706,6 +706,25 @@ Array [
 ]
 `;
 
+exports[`workers/repository/process/lookup .lookupUpdates() should add replacement updates 1`] = `
+Object {
+  "changelogUrl": undefined,
+  "homepage": undefined,
+  "sourceUrl": "https://github.com/nodejs/node",
+  "updates": Array [
+    Object {
+      "fromVersion": undefined,
+      "newName": "python",
+      "newValue": "4.0.0",
+      "newVersion": "4.0.0",
+      "toVersion": undefined,
+      "updateType": "replacement",
+    },
+  ],
+  "warnings": Array [],
+}
+`;
+
 exports[`workers/repository/process/lookup .lookupUpdates() should allow unstable versions if the current version is unstable 1`] = `
 Array [
   Object {

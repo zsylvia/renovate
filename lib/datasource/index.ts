@@ -28,6 +28,20 @@ function load(datasource: string): Promise<Datasource> {
 
 type GetReleasesInternalConfig = GetReleasesConfig & GetPkgReleasesConfig;
 
+function applyReplacements(
+  dep: ReleaseResult,
+  config: GetReleasesInternalConfig
+): ReleaseResult {
+  if (config.replacementName && config.replacementVersion) {
+    return {
+      ...dep,
+      replacementName: config.replacementName,
+      replacementVersion: config.replacementVersion,
+    };
+  }
+  return dep;
+}
+
 function resolveRegistryUrls(
   datasource: Datasource,
   extractedUrls: string[]
@@ -53,7 +67,7 @@ async function fetchReleases(
     registryUrls,
   });
   addMetaData(dep, datasourceName, config.lookupName);
-  return dep;
+  return applyReplacements(dep, config);
 }
 
 function getRawReleases(

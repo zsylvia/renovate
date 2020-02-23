@@ -1,7 +1,7 @@
 import { RenovateConfig } from './common';
 import { logger } from '../logger';
 import { clone } from '../util/clone';
-import * as definitions from './definitions';
+import { getOptions } from './definitions';
 
 export function mergeChildConfig<T, TChild>(
   parent: T,
@@ -14,7 +14,7 @@ export function mergeChildConfig<T, TChild>(
   const parentConfig = clone(parent);
   const childConfig = clone(child);
   const config: Record<string, any> = { ...parentConfig, ...childConfig };
-  for (const option of definitions.getOptions()) {
+  for (const option of getOptions()) {
     if (
       option.mergeable &&
       childConfig[option.name] &&

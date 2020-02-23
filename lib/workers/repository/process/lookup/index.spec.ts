@@ -1257,5 +1257,22 @@ describe('workers/repository/process/lookup', () => {
       const res = await lookup.lookupUpdates(config);
       expect(res).toMatchSnapshot();
     });
+    it('should add replacement updates', async () => {
+      config.currentValue = '8.1.0';
+      config.depName = 'node';
+      config.versioning = dockerVersioning.id;
+      config.datasource = datasourceDocker.id;
+      docker.getReleases.mockResolvedValueOnce({
+        replacementName: 'python',
+        replacementVersion: '4.0.0',
+        releases: [
+          {
+            version: '8.1.0',
+          },
+        ],
+      });
+      const res = await lookup.lookupUpdates(config);
+      expect(res).toMatchSnapshot();
+    });
   });
 });
