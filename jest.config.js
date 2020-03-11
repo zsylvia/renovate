@@ -2,6 +2,7 @@ const ci = !!process.env.CI;
 
 module.exports = {
   cacheDirectory: '.cache/jest',
+  clearMocks: true,
   coverageDirectory: './coverage',
   collectCoverage: true,
   collectCoverageFrom: [
@@ -20,6 +21,9 @@ module.exports = {
       statements: 100,
     },
   },
+  resetMocks: true,
+  resetModules: true,
+  restoreMocks: true,
   setupFilesAfterEnv: ['<rootDir>/test/globals.ts'],
   snapshotSerializers: ['<rootDir>/test/newline-snapshot-serializer.ts'],
   transform: {
