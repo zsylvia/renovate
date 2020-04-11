@@ -12,6 +12,8 @@ package.json
 **/__fixtures__/
 **/__mocks__/
 bin/yarn*
+.pnp.js
+.yarn/releases/yarn-berry.js
 
 # generated code
 **/*.generated.ts

@@ -17,6 +17,13 @@ junit.xml
 renovate-schema.json
 **/gradle-wrapper/__fixtures__/**/.gradle
 
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
 # generated code
 **/*.generated.ts
 tools/dist
