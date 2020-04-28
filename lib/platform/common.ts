@@ -23,6 +23,10 @@ export type CommitFilesConfig = {
   files: File[];
   message: string;
   parentBranch?: string;
+  createBranchBeforeCommit?: {
+    enabled: boolean;
+    extraPushOptions: object;
+  };
 };
 
 export interface GotApiOptions {

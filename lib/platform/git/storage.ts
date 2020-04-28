@@ -474,12 +474,24 @@ export class Storage {
     files,
     message,
     parentBranch = this._config.baseBranch,
+    createBranchBeforeCommit = undefined,
   }: CommitFilesConfig): Promise<string | null> {
     logger.debug(`Committing files to branch ${branchName}`);
     try {
       await this._git.reset('hard');
       await this._git.raw(['clean', '-fd']);
       await this._git.checkout(['-B', branchName, 'origin/' + parentBranch]);
+      if (createBranchBeforeCommit && createBranchBeforeCommit.enabled) {
+        // push unchanged
+        await this._git.push('origin', `${branchName}:${branchName}`, {
+          '--force': true,
+          '-u': true,
+          ...createBranchBeforeCommit.extraPushOptions,
+        });
+        // Fetch it after create
+        const ref = `refs/heads/${branchName}:refs/remotes/origin/${branchName}`;
+        await this._git.fetch(['origin', ref, '--depth=2', '--force']);
+      }
       const fileNames = [];
       const deleted = [];
       for (const file of files) {

@@ -596,6 +596,12 @@ export function commitFilesToBranch({
     files,
     message,
     parentBranch,
+    createBranchBeforeCommit: {
+      enabled: true,
+      extraPushOptions: {
+        '-o': 'ci.skip',
+      },
+    },
   });
 }
 

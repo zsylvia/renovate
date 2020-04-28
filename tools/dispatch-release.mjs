@@ -14,6 +14,7 @@ shell.echo(`Dispatching version: ${version}`);
     shell.echo('DRY-RUN: done.');
     return;
   }
+  console.log(`repo: ${process.env.GITHUB_REPOSITORY}`);
   await got(`repos/${process.env.GITHUB_REPOSITORY}/dispatches`, {
     baseUrl,
     headers: {
